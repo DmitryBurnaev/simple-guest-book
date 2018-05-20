@@ -13,7 +13,7 @@ if os.environ.get('TEST_ENV'):
         os.remove(PATH_TO_DATABASE)
 else:
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    PATH_TO_DATABASE = os.path.join(base_dir, 'data234.db')
+    PATH_TO_DATABASE = os.path.join(base_dir, 'data.db')
 
 
 engine = create_engine('sqlite:///{}'.format(PATH_TO_DATABASE),
