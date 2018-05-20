@@ -1,14 +1,12 @@
 import os
-import random
 
-from flask import Flask, jsonify, abort, request, make_response
-from sqlalchemy.exc import DatabaseError
+from flask import Flask, jsonify, request, make_response
 
 from database import db_session
 from models import GuestRecord
-from src.data import RECORDS
 
 app = Flask(__name__)
+# TODO: set configs from env
 
 
 @app.teardown_appcontext
@@ -18,7 +16,9 @@ def shutdown_session(exception=None):
 
 @app.route('/api/records/', methods=['GET'])
 def get_records():
-    records_query = GuestRecord.query.order_by('created_at').all()
+    records_query = GuestRecord.query\
+        .order_by(GuestRecord.created_at.desc())\
+        .all()
     records = [record.to_dict() for record in records_query]
     return jsonify({'ok': True, 'records': records})
 
@@ -40,19 +40,14 @@ def add_record():
 
 @app.route('/api/records/<int:record_id>/', methods=['DELETE'])
 def delete_records(record_id):
-    record = GuestRecord.query.filter_by(id=record_id).one()
+    record = GuestRecord.query.filter_by(id=record_id).first()
     if not record:
         return make_response(
-            jsonify({'ok': False, 'message': 'record not found'}),
+            jsonify({'ok': False, 'message': 'record was not found'}),
             404
         )
     db_session.query(GuestRecord).filter_by(id=record_id).delete()
-    # GuestRecord.query.filter_by(id=record_id).delete()
-    # try:
-    #     db_session.commit()
-    # except DatabaseError as e:
-    #     db_session.rollback()
-    #     raise e
+    db_session.commit()
     return jsonify({'ok': True})
 
 
