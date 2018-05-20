@@ -2,14 +2,13 @@
 
 This is a simple REST API application based on Flask framework.
 
-_Installation instructions:_
-
+_How to install_
 ```bash
-git clone .. guest_book
+git clone git@github.com:DmitryBurnaev/simple-guest-book.git guest_book
 cd guest_book
 python3 -m venv venv
 source venv/bin/activate
-pip install -r requirements.txt
+pip install -r requiriments.txt
 
 ```
 
@@ -21,4 +20,11 @@ source venv/bin/activate
 
 ```
 
+_How to test_
+```bash
+cd <path_to_projec>
+source venv/bin/activate
+(venv) $ python -m unittest
+
+```
 

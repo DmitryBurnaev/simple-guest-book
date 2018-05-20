@@ -1,6 +1,6 @@
 from datetime import datetime
 from sqlalchemy import Column, Integer, String, DateTime, Text
-from src.database import Base
+from database import Base
 
 
 class GuestRecord(Base):

@@ -1,9 +1,8 @@
 import os
-
 from flask import Flask, jsonify, request, make_response
 
-from src.database import db_session
-from src.models import GuestRecord, validate_record_data
+from database import db_session
+from models import GuestRecord, validate_record_data
 
 app = Flask(__name__)
 

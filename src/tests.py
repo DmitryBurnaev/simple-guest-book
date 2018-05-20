@@ -1,14 +1,16 @@
 import os
+import sys
 import unittest
 from datetime import datetime
 
 from flask import json
 
 os.environ['TEST_ENV'] = '1'
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from src import app
-from src.models import GuestRecord
-from src.database import create_db
+from models import GuestRecord
+from database import create_db
 
 
 class RestAPITestCase(unittest.TestCase):
