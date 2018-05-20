@@ -5,6 +5,7 @@ from src.database import Base
 
 class GuestRecord(Base):
     __tablename__ = 'guest_records'
+    __table_args__ = {'extend_existing': True}
 
     id = Column(Integer, primary_key=True)
     author_name = Column(String(50), nullable=False)

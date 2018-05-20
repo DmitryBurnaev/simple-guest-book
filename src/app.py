@@ -1,12 +1,12 @@
+import argparse
 import os
 
 from flask import Flask, jsonify, request, make_response
 
-from database import db_session
-from models import GuestRecord
+from src.database import db_session, init_db
+from src.models import GuestRecord
 
 app = Flask(__name__)
-# TODO: set configs from env
 
 
 @app.teardown_appcontext
@@ -27,11 +27,12 @@ def get_records():
 def add_record():
     record_data = request.get_json()
     try:
-        author, message = record_data.get('author'), record_data.get('message')
+        author = record_data.get('author_name')
+        message = record_data.get('message')
         assert author and message, '`author` and `message` are required fields'
     except AssertionError as e:
         return make_response(jsonify({'ok': False, 'message': str(e)}), 400)
-
+    print(author, message)
     record = GuestRecord(author, message)
     db_session.add(record)
     db_session.commit()
@@ -52,6 +53,12 @@ def delete_records(record_id):
 
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--createdb', action='store_true', default=False)
+    args = parser.parse_args()
+    if args.createdb:
+        init_db()
+
     app.run(host=os.environ.get('FLASK_APP_HOST', '127.0.0.1'),
             port=os.environ.get('FLASK_APP_PORT', '5000'),
             debug=os.environ.get('FLASK_DEBUG', False))
