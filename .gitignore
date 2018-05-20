@@ -10,3 +10,4 @@ __pycache__/
 /.idea
 /resources/*.db
 /config_local.py
+/*.db
