@@ -28,4 +28,14 @@ class GuestRecord(Base):
         }
 
 
-print('Models were read')
+def validate_record_data(data):
+    author_name = data.get('author_name')
+    message = data.get('message')
+    if not message:
+        return False, '`message` is required field'
+    if not author_name:
+        return False, '`author_name` is required field'
+    if len(author_name) > GuestRecord.author_name.property.columns[0].type.length:
+        return False, '`author_name` is too long'
+
+    return True, ''

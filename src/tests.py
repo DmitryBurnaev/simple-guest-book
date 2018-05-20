@@ -4,28 +4,24 @@ from datetime import datetime
 
 from flask import json
 
-PATH_TEST_DATABASE = os.environ.get('PATH_TEST_DATABASE', '/tmp/test.db')
-os.environ['FLASK_DB_PATH'] = 'sqlite:///{}'.format(PATH_TEST_DATABASE)
+os.environ['TEST_ENV'] = '1'
 
 from src import app
 from src.models import GuestRecord
+from src.database import create_db
 
 
 class RestAPITestCase(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        if os.path.exists(PATH_TEST_DATABASE):
-            os.remove(PATH_TEST_DATABASE)
-        app.init_db()
+        create_db()
         cls.client = app.app.test_client()
         cls.db_session = app.db_session
 
     @classmethod
     def tearDownClass(cls):
-        os.remove(PATH_TEST_DATABASE)
-        if 'FLASK_DB_PATH' in os.environ:
-            del os.environ['FLASK_DB_PATH']
+        del os.environ['TEST_ENV']
 
     def status_ok(self, response, expected_status=200):
         self.assertEqual(response.status_code, expected_status)

@@ -1,10 +1,9 @@
-import argparse
 import os
 
 from flask import Flask, jsonify, request, make_response
 
-from src.database import db_session, init_db
-from src.models import GuestRecord
+from src.database import db_session
+from src.models import GuestRecord, validate_record_data
 
 app = Flask(__name__)
 
@@ -26,14 +25,11 @@ def get_records():
 @app.route('/api/records/', methods=['POST'])
 def add_record():
     record_data = request.get_json()
-    try:
-        author = record_data.get('author_name')
-        message = record_data.get('message')
-        assert author and message, '`author` and `message` are required fields'
-    except AssertionError as e:
-        return make_response(jsonify({'ok': False, 'message': str(e)}), 400)
-    print(author, message)
-    record = GuestRecord(author, message)
+    valid, message = validate_record_data(record_data)
+    if not valid:
+        return make_response(jsonify({'ok': False, 'message': message}), 400)
+
+    record = GuestRecord(record_data['author_name'], record_data['message'])
     db_session.add(record)
     db_session.commit()
     return jsonify({'ok': True})
@@ -53,12 +49,6 @@ def delete_records(record_id):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--createdb', action='store_true', default=False)
-    args = parser.parse_args()
-    if args.createdb:
-        init_db()
-
     app.run(host=os.environ.get('FLASK_APP_HOST', '127.0.0.1'),
             port=os.environ.get('FLASK_APP_PORT', '5000'),
             debug=os.environ.get('FLASK_DEBUG', False))
