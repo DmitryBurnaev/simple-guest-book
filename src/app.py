@@ -1,7 +1,7 @@
 import os
 from flask import Flask, jsonify, request, make_response, render_template
 
-from database import db_session
+from database import db_session, create_db, PATH_TO_DATABASE
 from models import GuestRecord, validate_record_data
 
 app = Flask(__name__)
@@ -58,6 +58,8 @@ def delete_records(record_id):
 
 
 if __name__ == '__main__':
+    if not os.path.exists(PATH_TO_DATABASE):
+        create_db()
     app.run(host=os.environ.get('FLASK_APP_HOST', '127.0.0.1'),
             port=os.environ.get('FLASK_APP_PORT', '5000'),
             debug=os.environ.get('FLASK_DEBUG', False))

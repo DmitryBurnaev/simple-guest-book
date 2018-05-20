@@ -13,7 +13,7 @@ if os.environ.get('TEST_ENV'):
         os.remove(PATH_TO_DATABASE)
 else:
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    PATH_TO_DATABASE = os.path.join(base_dir, 'data111.db')
+    PATH_TO_DATABASE = os.path.join(base_dir, 'data234.db')
 
 
 engine = create_engine('sqlite:///{}'.format(PATH_TO_DATABASE),
@@ -26,14 +26,5 @@ Base.query = db_session.query_property()
 
 
 def create_db():
-    from src import models
+    from models import GuestRecord
     Base.metadata.create_all(bind=engine)
-
-
-if __name__ == '__main__':
-    sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--createdb', action='store_true', default=False)
-    args = parser.parse_args()
-    if args.createdb:
-        create_db()
