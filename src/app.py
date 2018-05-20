@@ -1,5 +1,5 @@
 import os
-from flask import Flask, jsonify, request, make_response
+from flask import Flask, jsonify, request, make_response, render_template
 
 from database import db_session
 from models import GuestRecord, validate_record_data
@@ -10,6 +10,11 @@ app = Flask(__name__)
 @app.teardown_appcontext
 def shutdown_session(exception=None):
     db_session.remove()
+
+
+@app.route('/', methods=['GET'])
+def index():
+    return render_template('index.html')
 
 
 @app.route('/api/records/', methods=['GET'])
@@ -24,6 +29,11 @@ def get_records():
 @app.route('/api/records/', methods=['POST'])
 def add_record():
     record_data = request.get_json()
+    if not record_data:
+        return make_response(
+            jsonify({'ok': False, 'message': 'There is no json data'}),
+            400
+        )
     valid, message = validate_record_data(record_data)
     if not valid:
         return make_response(jsonify({'ok': False, 'message': message}), 400)

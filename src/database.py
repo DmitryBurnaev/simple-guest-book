@@ -1,5 +1,6 @@
 import argparse
 import os
+import sys
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -12,7 +13,7 @@ if os.environ.get('TEST_ENV'):
         os.remove(PATH_TO_DATABASE)
 else:
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    PATH_TO_DATABASE = os.path.join(base_dir, 'data.db')
+    PATH_TO_DATABASE = os.path.join(base_dir, 'data111.db')
 
 
 engine = create_engine('sqlite:///{}'.format(PATH_TO_DATABASE),
@@ -30,6 +31,7 @@ def create_db():
 
 
 if __name__ == '__main__':
+    sys.path.append(os.path.dirname(os.path.abspath(__file__)))
     parser = argparse.ArgumentParser()
     parser.add_argument('--createdb', action='store_true', default=False)
     args = parser.parse_args()

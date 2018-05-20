@@ -9,7 +9,7 @@ class GuestRecord(Base):
 
     id = Column(Integer, primary_key=True)
     author_name = Column(String(50), nullable=False)
-    created_at = Column(DateTime(), default=datetime.now())
+    created_at = Column(DateTime(), default=datetime.now)
     message = Column(Text(), nullable=True)
 
     def __init__(self, author_name, message):

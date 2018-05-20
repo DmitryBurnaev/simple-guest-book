@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+    </head>
+    <body>
+        <form id="add-record-form" onsubmit="addRecord(); return false;">
+            <p><input type="text" name="author_name" placeholder="your name"></p>
+            <p><textarea name="message" placeholder="your message"></textarea></p>
+            <p><button type="submit">Submit</button></p>
+        </form>
+        <hr>
+        <div id="content">
+            <ul id="record-items"></ul>
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="{{ url_for('static', filename='app.js') }}"></script>
+    </body>
+</html>
